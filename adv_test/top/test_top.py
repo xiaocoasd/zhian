@@ -382,14 +382,15 @@ class AdvTestTop(ABC):
 
         print("test end...")
         print(corr_matrix)
-        if not np.any(np.isnan(corr_matrix)):
-            list_corr_matrix = [round(corr_matrix[0,0],2),round(corr_matrix[0,1],2),round(corr_matrix[1,0],2),round(corr_matrix[1,1],2)]
+
+        if np.any(np.isnan(corr_matrix)) or np.all(np.array(corr_matrix) == [[0,0],[0,0]]):
+            write_result(str(asr_mean) + " " + str(robust_rate[0]) + " " + str(env_stats_mean_rew) + " " + str(
+                rew_change_mean_rew) + " " + str(abs_error) + " " + str(rsme_error) + " none")
+        else:
+            list_corr_matrix = [round(corr_matrix[0][0], 2), round(corr_matrix[0][1], 2), round(corr_matrix[1][0], 2), round(corr_matrix[1][1], 2)]
             corr_matrix_str = json.dumps(list_corr_matrix).replace("\n", "").replace(" ", "")
             write_result(str(asr_mean) + " " + str(robust_rate[0]) + " " + str(env_stats_mean_rew) + " " + str(
                 rew_change_mean_rew) + " " + str(abs_error) + " " + str(rsme_error) + " " + corr_matrix_str)
-        else:
-            write_result(str(asr_mean) + " " + str(robust_rate[0]) + " " + str(env_stats_mean_rew) + " " + str(
-                rew_change_mean_rew) + " " + str(abs_error) + " " + str(rsme_error) + " none")
         write_to_file("测试结束！\n")
         return (
             asr_mean,

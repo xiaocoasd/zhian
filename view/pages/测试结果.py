@@ -101,24 +101,6 @@ if st.session_state["policy"] is not None:
     except Exception as e:
         pass
 
-    # if st.session_state["do_attack"] and "atk_succ_rate" in st.session_state and "robust_rate" in st.session_state:
-    #     st.write("## 模型最终得分")
-    #     st.write("#### 相对鲁棒性：")
-    #     st.write(str(round(np.round(st.session_state["robust_rate"][0] * 100))))
-    #     st.write("#### 攻击抵抗性：")
-    #     st.write(str(round((100 - st.session_state["atk_succ_rate"]))))
-    # else:
-    #     pass
-    # if st.session_state[
-    #     "do_env_change"] and "env_stats_mean_rew" in st.session_state and "rew_change_mean_rew" in st.session_state:
-    #     # print(st.session_state["env_stats_mean_rew"])
-    #     # print(st.session_state["rew_change_mean_rew"])
-    #     st.write("#### 环境状态改变后的reward：")
-    #     st.write(str(round(st.session_state["env_stats_mean_rew"], 2)))
-    #     st.write("#### 奖励结构改变后的reward：")
-    #     st.write(str(round(st.session_state["rew_change_mean_rew"], 2)))
-    # else:
-    #     pass
     if os.path.exists("view/result.txt"):
         with open("view/result.txt", 'r', encoding='utf-8') as f:
             text = f.read()
@@ -130,21 +112,34 @@ if st.session_state["policy"] is not None:
         rew_change_mean_rew = round(float(values[3]), 2)
         abs_error = round(float(values[4]), 2)
         rsme_error = round(float(values[5]), 2)
-        print("values[6]")
-        print(values[6])
         st.write("### 您的模型得分")
+        # 初始化一个布尔变量，用于记录条件语句是否都发生了
+        all_conditions_met = True
+
         if atk_succ_rate != 100.00:
             st.write("#### 攻击抵抗力：" + str(atk_succ_rate))
+            all_conditions_met = False
+
         if robust_rate != 0.00:
             st.write("#### 相对鲁棒性：" + str(robust_rate))
+            all_conditions_met = False
+
         if env_stats_mean_rew != 0.00:
             st.write("#### 环境参数改变后的平均奖励：" + str(env_stats_mean_rew))
+            all_conditions_met = False
+
         if rew_change_mean_rew != 0.00:
             st.write("#### 奖励结构改变后的平均奖励：" + str(rew_change_mean_rew))
+            all_conditions_met = False
+
         if abs_error != 0.00:
             st.write("#### abs_error: " + str(abs_error))
+            all_conditions_met = False
+
         if rsme_error != 0.00:
             st.write("#### rsme_error: " + str(rsme_error))
+            all_conditions_met = False
+
         if values[6] != "none":
             st.write("#### corr_matrix：\n")
             numbers = [float(num) for num in values[6].strip("[]").split(",")]
@@ -152,6 +147,14 @@ if st.session_state["policy"] is not None:
             matrix = np.array(numbers).reshape((2, 2))
             for line in matrix:
                 print("  ".join(map(str, line)))
+            all_conditions_met = False
+
+        # 检查所有条件是否都满足
+        if all_conditions_met:
+            st.write("##### 暂无结果")
+        else:
+            pass
+
 
 
 else:

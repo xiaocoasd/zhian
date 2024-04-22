@@ -122,7 +122,7 @@ if thild_fn is not None:
     # 执行上传的文件
     exec(file_contents)
 if st.session_state["policy"] is None:
-    uploaded_file = st.file_uploader("将文件拖放到此处", type=None)
+    uploaded_file = st.file_uploader("将模型文件拖放到此处", type="pth")
     if uploaded_file is not None:
         try:
             st.write("以下是你上传的文件：")
