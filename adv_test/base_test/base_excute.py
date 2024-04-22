@@ -38,6 +38,7 @@ class BaseTestExe(ABC):
 
         ori_mean_rew = 0.0
         rdm_mean_rew = 0.0
+        ori_all_rew = []
 
         ori_tree_input = []
         ori_tree_output = []
@@ -46,6 +47,8 @@ class BaseTestExe(ABC):
 
         episode_count = 0
         while episode_count < self.test_episode:
+
+            print("第{}回合测试开始".format(episode_count + 1))
 
             self.reset()
             (
@@ -94,11 +97,14 @@ class BaseTestExe(ABC):
             )
 
             ori_mean_rew += ori_rew
+            ori_all_rew.append(ori_rew)
 
             ori_frames_array.append(ori_frames)
             ori_tree_input.append(ori_obs_input)
             ori_tree_output.append(ori_act_output)
             ori_pos_array.append(ori_logits_array)
+
+            print("第{}回合测试结束".format(episode_count + 1))
 
             episode_count += 1
 
@@ -110,6 +116,7 @@ class BaseTestExe(ABC):
             ori_frames_array,
             rdm_mean_rew,
             ori_mean_rew,
+            ori_all_rew,
             ori_tree_input,
             ori_tree_output,
             ori_pos_array,

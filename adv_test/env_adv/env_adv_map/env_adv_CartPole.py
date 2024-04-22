@@ -6,7 +6,7 @@ from gymnasium import logger
 
 class EnvCartPoleAdv(CartPoleEnv):
 
-    def __init__(self, is_change_reward, render_mode: str | None = None):
+    def __init__(self, is_change_reward, render_mode: str | None = None, args=None):
         super().__init__(render_mode)
         self.is_change_reward = is_change_reward
         if is_change_reward is False:
@@ -107,8 +107,7 @@ class EnvCartPoleAdv(CartPoleEnv):
             state, reward, terminated, truncated, info = super().step(action)
             self.steps += 1
             truncated = self.steps >= self.max_episode_steps
-            # print("%%%%%%%%%%%%%%")
-            # print(self.steps)
+
             done = terminated | truncated
             if done:
                 self.reset()

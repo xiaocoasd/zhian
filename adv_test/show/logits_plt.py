@@ -20,6 +20,10 @@ class LogitsPlt(ABC):
         super().__init__()
         self.data = data
         self.act_data = act_data
+        # print(len(self.data))
+        # print(self.data)
+        # print(len(self.act_data))
+        # print(self.act_data)
 
     def plt(
         self,
@@ -57,7 +61,14 @@ class LogitsPlt(ABC):
 
             if len(self.data[0]) > 2:
                 data_std = StandardScaler().fit_transform(self.data)
-                data_dimen = TSNE(n_components=2)
+                # print("###############")
+                # print(self.data)
+                # print(data_std)
+                data_dimen = TSNE(
+                    n_components=2,
+                    perplexity=(len(data_std) - 1) if len(data_std) <= 30 else 30,
+                )
+                print(data_dimen)
                 data_2d = data_dimen.fit_transform(data_std)
             else:
                 data_2d = self.data

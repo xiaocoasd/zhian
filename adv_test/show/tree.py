@@ -11,6 +11,16 @@ import graphviz
 
 from sklearn import tree
 
+def write_to_file(text):
+    # 检查文件是否存在
+    if not os.path.exists("view/display.txt"):
+        # 如果文件不存在，创建文件
+        with open("view/display.txt", 'w', encoding='utf-8') as f:
+            f.write(text)
+    else:
+        # 如果文件已存在，在末尾追加内容
+        with open("view/display.txt", 'a', encoding='utf-8') as f:
+            f.write(text)
 class TreeTop(ABC):
 
     def __init__(
@@ -34,19 +44,24 @@ class TreeTop(ABC):
 
         accuracy = clf.score(x_test, y_test)
         print("决策树精度:", accuracy)
+        # write_to_file("决策树精度:"+str(round(accuracy),2))
         fn = ["position", "angle", "cart", "rate"]
         cn = ["left", "right"]
 
-        dot_data = tree.export_graphviz(clf
-                            ,out_file = None
-                            ,feature_names= fn
-                            ,class_names=cn
-                            ,filled=True
-                            ,rounded=True
-                            ,impurity=False # Remove Gini index
-                            ,proportion=False
-                            )
+        dot_data = tree.export_graphviz(
+            clf,
+            out_file=None,
+            feature_names=fn,
+            class_names=cn,
+            filled=True,
+            rounded=True,
+            impurity=False,  # Remove Gini index
+            proportion=False,
+        )
+
         graph = graphviz.Source(dot_data)
-        #remember to change for your own address
-        graph.save('resource/tree/tree.dot')
-        graph.render('resource/tree/tree', format='png')
+
+        # remember to change for your own address
+        graph.save("resource/tree/tree.dot")
+
+        graph.render("resource/tree/tree", format="png")

@@ -34,8 +34,9 @@ def excute_for_one_episode(
 
     while True:
         last_state = data.policy.pop("hidden_state", None)
-
+        # print("**********")
         frames.append(env.render())
+        # print("&&&&&&&&&&")
         if is_rdm:
             rdm_act = [env.action_space[0].sample()]
             rdm_act_sample = policy_t.map_action_inverse(rdm_act)
@@ -69,6 +70,9 @@ def excute_for_one_episode(
                     ori_obs=ori_obs,
                     ori_act=ori_act,
                 )
+
+                # print(ori_obs)
+                # print(adv_obs)
 
                 with torch.no_grad():
                     adv_obs = adv_obs.cpu().detach().numpy()
@@ -119,6 +123,9 @@ def excute_for_one_episode(
         logits_array.append(deepcopy(logits_temp))
 
         obs_next, rew, terminated, truncated, info = env.step(action=data.act)
+
+        # print("*********")
+        # print(obs_next)
 
         done = terminated | truncated
         # 更新数据

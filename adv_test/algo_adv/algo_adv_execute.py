@@ -1,3 +1,4 @@
+import os
 from abc import ABC
 import gymnasium as gym
 import torch.nn as nn
@@ -17,29 +18,35 @@ import sys
 import math
 from copy import deepcopy
 
-
+def write_to_file(text):
+    # 检查文件是否存在
+    if not os.path.exists("view/display.txt"):
+        # 如果文件不存在，创建文件
+        with open("view/display.txt", 'w', encoding='utf-8') as f:
+            f.write(text)
+    else:
+        # 如果文件已存在，在末尾追加内容
+        with open("view/display.txt", 'a', encoding='utf-8') as f:
+            f.write(text)
 class AdvAtkExe(ABC):
 
     def __init__(
-            self,
-            # my_window,
-            # ready,
-            policy: BasePolicy,
-            env: gym.Env,
-            adv_obs_gene: AdvAtkObsGene,
-            net: nn.Module,
-            test_steps=None,
-            test_episode=None,
+        self,
+        policy: BasePolicy,
+        env: gym.Env,
+        adv_obs_gene: AdvAtkObsGene,
+        net: nn.Module,
+        test_steps=None,
+        test_episode=None,
     ) -> None:
         super().__init__()
-        # self.my_window = my_window
         self.net = net
         self.policy = deepcopy(policy)
         self.env = env
         self.data = Batch(
             state={}, obs={}, act={}, rew={}, done={}, info={}, obs_next={}, policy={}
         )
-        # self.ready = ready
+
         self.adv_obs_gene = adv_obs_gene
 
         self.test_steps = test_steps
@@ -51,6 +58,8 @@ class AdvAtkExe(ABC):
         atk_rew_array = np.arange(frequence_counts)
         atk_pos_array = np.arange(frequence_counts, dtype=object)
         atk_frames_array = np.arange(frequence_counts, dtype=object)
+
+        atk_rew_all_array = np.arange(frequence_counts, dtype=object)
 
         atk_succ_rate_array = np.arange(frequence_counts)
 
@@ -67,6 +76,7 @@ class AdvAtkExe(ABC):
             # 攻击得到结果
             count = 1
             while count <= self.test_steps:
+
                 self.reset()
                 (
                     atk_frames,
@@ -102,15 +112,17 @@ class AdvAtkExe(ABC):
 
             for i in range(0, frequence_counts):
                 atk_frequence = (i + 1) * (1 / frequence_counts)
-                print("攻击频率为{}，测试开始\n".format(atk_frequence))
-                # self.my_window.test_progress.append("\n            攻击频率为{:.1f}，测试开始\n".format(atk_frequence))
+                print("攻击频率为{:.2f}，测试开始".format(atk_frequence))
+                # write_to_file("攻击频率为{:.2f}，测试开始\n".format(atk_frequence))
                 atk_mean_rew = 0.0
+                atk_rew_all = np.arange(self.test_episode)
+
                 atk_frames_array_t = []
                 atk_pos_array_t = []
                 atk_succ_rate_t = []
                 atk_act_array_t = []
-                # episode_count = 0
-                for episode_count in range(0, self.test_episode):
+                episode_count = 0
+                while episode_count < self.test_episode:
 
                     # 攻击得到结果
                     self.reset()
@@ -135,11 +147,15 @@ class AdvAtkExe(ABC):
                     )
 
                     atk_mean_rew += atk_rew
+                    atk_rew_all[episode_count] = atk_rew
 
                     atk_frames_array_t.append(atk_frames)
                     atk_pos_array_t.append(atk_logits_array)
 
-                    succ_rate = 100 * succ_atk / nums_atk
+                    if nums_atk > 0:
+                        succ_rate = 100 * succ_atk / nums_atk
+                    else:
+                        succ_rate = 0.0
                     atk_succ_rate_t.append(succ_rate)
 
                     atk_act_array_t.append(atk_act_output)
@@ -152,25 +168,26 @@ class AdvAtkExe(ABC):
                             succ_rate,
                         )
                     )
-                    messege = "messege " + str(episode_count + 1) + " " + str(nums_atk) + " " + str(succ_atk) + " " + str(succ_rate)
-                    # self.ready.emit(messege)
-                    # self.my_window.test_progress.append("        第22回合结束")
-                    # self.my_window.test_progress.append("        第{}回合结束".format(
-                    #         (episode_count + 1)
-                    #         # nums_atk,
-                    #         # succ_atk
-                    #     ))
-                    # episode_count += 1
+                    # write_to_file(
+                    #     "第{}回合结束，攻击次数:{},攻击成功次数：{},攻击成功率为：{:.2f}%\n".format(
+                    #         (episode_count + 1),
+                    #         nums_atk,
+                    #         succ_atk,
+                    #         succ_rate,
+                    #     )
+                    # )
+                    episode_count += 1
 
                 atk_rew_array[i] = atk_mean_rew / self.test_episode
-                print(atk_rew_array[i])
+                atk_rew_all_array[i] = atk_rew_all
+                # print(atk_rew_array[i])
                 atk_rdm_index = np.random.choice(len(atk_frames_array_t), replace=False)
                 atk_frames_array[i] = atk_frames_array_t[atk_rdm_index]
                 atk_pos_array[i] = atk_pos_array_t[atk_rdm_index]
                 atk_succ_rate_array[i] = np.mean(atk_succ_rate_t)
                 atk_act_array.append(atk_act_array_t[atk_rdm_index])
 
-                print("攻击频率为{}，测试完成".format(atk_frequence))
+                print("攻击频率为{:.2f}，测试完成".format(atk_frequence))
 
             min_rew_index = np.argmin(atk_rew_array)
             max_rew_index = np.argmax(atk_rew_array)
@@ -186,6 +203,7 @@ class AdvAtkExe(ABC):
             atk_rew_array[min_rew_index],
             atk_rew_array[med_rew_index],
             atk_rew_array[max_rew_index],
+            atk_rew_all_array[med_rew_index],
             atk_rew_array,
             atk_pos_array[min_rew_index],
             atk_pos_array[med_rew_index],
