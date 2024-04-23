@@ -83,7 +83,7 @@ count = st_autorefresh(interval=4000, limit=100000, key="fizzbuzzcounter")
 if "policy" not in st.session_state:
     st.session_state["policy"] = None
 if st.session_state["policy"] is not None:
-    with open("../view/display.txt", 'r', encoding='utf-8') as f:
+    with open("view/display.txt", 'r', encoding='utf-8') as f:
         text = f.read()
     st.write("##### 在这里查看您的测试进度")
     st.text(text)
@@ -136,8 +136,8 @@ if st.session_state["policy"] is not None:
     except Exception as e:
         pass
 
-    if os.path.exists("../view/result.txt"):
-        with open("../view/result.txt", 'r', encoding='utf-8') as f:
+    if os.path.exists("view/result.txt"):
+        with open("view/result.txt", 'r', encoding='utf-8') as f:
             text = f.read()
         values = text.split()  # 按空格分割值
         # 解析每个值并存储到相应的变量中

@@ -24,23 +24,23 @@ from matplotlib import animation
 
 def write_to_file(text):
     # 检查文件是否存在
-    if not os.path.exists("../view/display.txt"):
+    if not os.path.exists("view/display.txt"):
         # 如果文件不存在，创建文件
-        with open("../view/display.txt", 'w', encoding='utf-8') as f:
+        with open("view/display.txt", 'w', encoding='utf-8') as f:
             f.write(text)
     else:
         # 如果文件已存在，在末尾追加内容
-        with open("../view/display.txt", 'a', encoding='utf-8') as f:
+        with open("view/display.txt", 'a', encoding='utf-8') as f:
             f.write(text)
 def write_result(text):
     # 检查文件是否存在
-    if not os.path.exists("../view/result.txt"):
+    if not os.path.exists("view/result.txt"):
         # 如果文件不存在，创建文件
-        with open("../view/result.txt", 'w', encoding='utf-8') as f:
+        with open("view/result.txt", 'w', encoding='utf-8') as f:
             f.write(text)
     else:
         # 如果文件已存在，在末尾追加内容
-        with open("../view/result.txt", 'a', encoding='utf-8') as f:
+        with open("view/result.txt", 'a', encoding='utf-8') as f:
             f.write(text)
 class AdvTestTop(ABC):
 
