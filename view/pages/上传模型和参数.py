@@ -43,10 +43,10 @@ def sidebar_bg(side_bg):
 
 
 # 调用
-sidebar_bg('../view/pic/sback.jpg')
+sidebar_bg('view/pic/sback.jpg')
 
 # 调用
-main_bg('../view/pic/background.jpg')
+main_bg('view/pic/background.jpg')
 def my_test(policy, args):
     policy.eval()
     env = gym.make(args.task)
@@ -183,25 +183,25 @@ list2 = ["CartPole-v1", "Pendulum-v1", "Pong-v0", "Breakout-v0",
          "Humanoid-v3", "HalfCheetah-v3", "Ant-v3", "Taxi-v3","highway-v0"]
 st.session_state["task"] = st.selectbox("选择环境", list2, key="selectbox3")
 if st.session_state["task"] == "CartPole-v1":
-    st.image("../view/gif/cart_pole.gif", caption="当前环境")
+    st.image("view/gif/cart_pole.gif", caption="当前环境")
 elif st.session_state["task"] == "Pendulum-v1":
-    st.image("../view/gif/pendulum.gif", caption="当前环境")
+    st.image("view/gif/pendulum.gif", caption="当前环境")
 elif st.session_state["task"] == "Pong-v0":
-    st.image("../view/gif/pong.gif", caption="当前环境")
+    st.image("view/gif/pong.gif", caption="当前环境")
 elif st.session_state["task"] == "Breakout-v0":
-    st.image("../view/gif/breakout.gif", caption="当前环境")
+    st.image("view/gif/breakout.gif", caption="当前环境")
 elif st.session_state["task"] == "SpaceInvaders-v0":
-    st.image("../view/gif/space_invaders.gif", caption="当前环境")
+    st.image("view/gif/space_invaders.gif", caption="当前环境")
 elif st.session_state["task"] == "Humanoid-v3":
-    st.image("../view/gif/humanoid.gif", caption="当前环境")
+    st.image("view/gif/humanoid.gif", caption="当前环境")
 elif st.session_state["task"] == "HalfCheetah-v3":
-    st.image("../view/gif/half_cheetah.gif", caption="当前环境")
+    st.image("view/gif/half_cheetah.gif", caption="当前环境")
 elif st.session_state["task"] == "Ant-v3":
-    st.image("../view/gif/ant.gif", caption="当前环境")
+    st.image("view/gif/ant.gif", caption="当前环境")
 elif st.session_state["task"] == "Taxi-v3":
-    st.image("../view/gif/taxi.gif", caption="当前环境")
+    st.image("view/gif/taxi.gif", caption="当前环境")
 elif st.session_state["task"] == "highway-v0":
-    st.image("../view/gif/highway.gif", caption="当前环境")
+    st.image("view/gif/highway.gif", caption="当前环境")
 st.session_state["is_not_based_on_gym"] = st.checkbox("使用其他环境", key="checkbox6")
 
 test_begin = st.button("开始测试", type="primary")

@@ -36,10 +36,10 @@ def sidebar_bg(side_bg):
 
 
 # 调用
-sidebar_bg('../view/pic/sback.jpg')
+sidebar_bg('view/pic/sback.jpg')
 
 # 调用
-main_bg('../view/pic/background.jpg')
+main_bg('view/pic/background.jpg')
 if "slider1" in st.session_state:
     st.session_state["slider1"] = st.session_state["slider1"]
 if "slider2" in st.session_state:
