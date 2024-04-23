@@ -10,7 +10,7 @@ from tianshou.utils.space_info import SpaceInfo
 import torch
 import sys
 
-sys.path.append('../')
+sys.path.append('./')
 import adv_test
 def main_bg(main_bg):
     main_bg_ext = "png"
