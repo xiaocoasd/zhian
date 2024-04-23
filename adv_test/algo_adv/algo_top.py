@@ -1,4 +1,3 @@
-import os
 from abc import ABC
 import torch.nn as nn
 
@@ -12,16 +11,7 @@ from typing import List
 
 import numpy as np
 
-def write_to_file(text):
-    # 检查文件是否存在
-    if not os.path.exists("view/display.txt"):
-        # 如果文件不存在，创建文件
-        with open("view/display.txt", 'w', encoding='utf-8') as f:
-            f.write(text)
-    else:
-        # 如果文件已存在，在末尾追加内容
-        with open("view/display.txt", 'a', encoding='utf-8') as f:
-            f.write(text)
+
 # 返回样本扰动
 class AlgoAtkAdv(ABC):
 
@@ -72,7 +62,7 @@ class AlgoAtkAdv(ABC):
             atk_eps = (i + 1) * (1 / counts)
 
             print("攻击强度为{:.2f}，测试开始".format(atk_eps))
-            write_to_file("攻击强度为{:.2f}，测试开始\n".format(atk_eps))
+
             atk_obs_gene = AdvAtkObsGene(
                 args=self.args,
                 net=self.net,

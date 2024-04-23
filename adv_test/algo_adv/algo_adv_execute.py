@@ -1,4 +1,3 @@
-import os
 from abc import ABC
 import gymnasium as gym
 import torch.nn as nn
@@ -18,16 +17,7 @@ import sys
 import math
 from copy import deepcopy
 
-def write_to_file(text):
-    # 检查文件是否存在
-    if not os.path.exists("view/display.txt"):
-        # 如果文件不存在，创建文件
-        with open("view/display.txt", 'w', encoding='utf-8') as f:
-            f.write(text)
-    else:
-        # 如果文件已存在，在末尾追加内容
-        with open("view/display.txt", 'a', encoding='utf-8') as f:
-            f.write(text)
+
 class AdvAtkExe(ABC):
 
     def __init__(
@@ -113,7 +103,6 @@ class AdvAtkExe(ABC):
             for i in range(0, frequence_counts):
                 atk_frequence = (i + 1) * (1 / frequence_counts)
                 print("攻击频率为{:.2f}，测试开始".format(atk_frequence))
-                # write_to_file("攻击频率为{:.2f}，测试开始\n".format(atk_frequence))
                 atk_mean_rew = 0.0
                 atk_rew_all = np.arange(self.test_episode)
 
@@ -168,14 +157,6 @@ class AdvAtkExe(ABC):
                             succ_rate,
                         )
                     )
-                    # write_to_file(
-                    #     "第{}回合结束，攻击次数:{},攻击成功次数：{},攻击成功率为：{:.2f}%\n".format(
-                    #         (episode_count + 1),
-                    #         nums_atk,
-                    #         succ_atk,
-                    #         succ_rate,
-                    #     )
-                    # )
                     episode_count += 1
 
                 atk_rew_array[i] = atk_mean_rew / self.test_episode

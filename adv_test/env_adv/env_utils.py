@@ -3,6 +3,8 @@ from adv_test.env_adv.env_adv_map.env_adv_CartPole import EnvCartPoleAdv
 
 from adv_test.env_adv.env_adv_map.env_adv_Highway import EnvHighwayAdv
 
+from adv_test.env_adv.env_adv_map.env_adv_Pendulum import EnvPendulumAdv
+
 
 def env_adv_make(env_name, render_mode, is_change_reward, args, env=None):
     if env is None:
@@ -13,7 +15,11 @@ def env_adv_make(env_name, render_mode, is_change_reward, args, env=None):
                 args=args,
             )
         elif env_name == "Pendulum-v1":
-            print("未实现")
+            return EnvPendulumAdv(
+                is_change_reward=is_change_reward,
+                render_mode=render_mode,
+                args=args,
+            )
             sys.exit()
         elif env_name == "highway-v0":
 

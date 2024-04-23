@@ -22,38 +22,33 @@ from adv_test.show.tree import TreeTop
 import matplotlib.pyplot as plt
 from matplotlib import animation
 
-
 def write_to_file(text):
     # 检查文件是否存在
-    if not os.path.exists("view/display.txt"):
+    if not os.path.exists("../view/display.txt"):
         # 如果文件不存在，创建文件
-        with open("view/display.txt", 'w', encoding='utf-8') as f:
+        with open("../view/display.txt", 'w', encoding='utf-8') as f:
             f.write(text)
     else:
         # 如果文件已存在，在末尾追加内容
-        with open("view/display.txt", 'a', encoding='utf-8') as f:
+        with open("../view/display.txt", 'a', encoding='utf-8') as f:
             f.write(text)
-
-
 def write_result(text):
     # 检查文件是否存在
-    if not os.path.exists("view/result.txt"):
+    if not os.path.exists("../view/result.txt"):
         # 如果文件不存在，创建文件
-        with open("view/result.txt", 'w', encoding='utf-8') as f:
+        with open("../view/result.txt", 'w', encoding='utf-8') as f:
             f.write(text)
     else:
         # 如果文件已存在，在末尾追加内容
-        with open("view/result.txt", 'a', encoding='utf-8') as f:
+        with open("../view/result.txt", 'a', encoding='utf-8') as f:
             f.write(text)
-
-
 class AdvTestTop(ABC):
 
     def __init__(
-            self,
-            args,
-            policy,
-            env: gym.Env,
+        self,
+        args,
+        policy,
+        env: gym.Env,
     ) -> None:
         super().__init__()
 
@@ -130,14 +125,13 @@ class AdvTestTop(ABC):
         # print(ori_tree_output[0])
         # print(len(ori_tree_output_value))
         # print(len(ori_pos_array[0]))
-        if self.args.task == "highway":
-            pass
-        else:
-            write_to_file("正在绘制模型决策树......\n")
-            TreeTop(
-                tree_input=ori_tree_input_value,
-                tree_output=ori_tree_output_value,
-            )
+        
+        TreeTop(
+            tree_input=ori_tree_input_value,
+            tree_output=ori_tree_output_value,
+            path="resource/tree/tree.png",
+            env_name=self.args.task,
+        )
 
         ori_pos_all = [item for sublist in ori_pos_array for item in sublist]
         ori_act_all = [item for sublist in ori_tree_output for item in sublist]
@@ -205,7 +199,7 @@ class AdvTestTop(ABC):
                 env=self.env,
             ).run()
 
-            print("对抗攻击结束！\n")
+            print("对抗攻击结束")
             write_to_file("对抗攻击结束！\n")
             write_to_file("正在保存图片......\n")
             print("开始保存图片")
@@ -381,8 +375,6 @@ class AdvTestTop(ABC):
             print("环境异化测试结束")
 
         print("test end...")
-        print(corr_matrix)
-
         if np.any(np.isnan(corr_matrix)) or np.all(np.array(corr_matrix) == [[0,0],[0,0]]):
             write_result(str(asr_mean) + " " + str(robust_rate[0]) + " " + str(env_stats_mean_rew) + " " + str(
                 rew_change_mean_rew) + " " + str(abs_error) + " " + str(rsme_error) + " none")
@@ -404,13 +396,13 @@ class AdvTestTop(ABC):
 
 
 def make_gif(
-        frames,
-        is_rdm,
-        is_atk,
-        is_env_adv,
-        env_stats_adv,
-        env_rew_adv,
-        gif_code=None,
+    frames,
+    is_rdm,
+    is_atk,
+    is_env_adv,
+    env_stats_adv,
+    env_rew_adv,
+    gif_code=None,
 ):
     plt.figure()
     patch = plt.imshow(frames[0])
@@ -419,7 +411,7 @@ def make_gif(
     def animate(i):
         patch.set_data(frames[i])
 
-    anim = animation.FuncAnimation(plt.gcf(), animate, frames=len(frames), interval=30)
+    anim = animation.FuncAnimation(plt.gcf(), animate, frames=len(frames), interval=60)
 
     if is_env_adv:
         if env_stats_adv:
@@ -436,7 +428,7 @@ def make_gif(
             gif_path = "resource/attack/atk_result_{}.gif".format(gif_code)
     ensure_dir(gif_path)
 
-    anim.save(gif_path, writer="pillow", fps=30)
+    anim.save(gif_path, writer="pillow", fps=15)
 
 
 def ensure_dir(file_path):

@@ -4,6 +4,8 @@ from copy import deepcopy
 import torch
 import gymnasium as gym
 
+import torch.nn.modules
+
 
 def excute_for_one_episode(
     policy_t,

@@ -20,10 +20,6 @@ class LogitsPlt(ABC):
         super().__init__()
         self.data = data
         self.act_data = act_data
-        # print(len(self.data))
-        # print(self.data)
-        # print(len(self.act_data))
-        # print(self.act_data)
 
     def plt(
         self,
@@ -34,6 +30,7 @@ class LogitsPlt(ABC):
         x_label="x_value",
         y_label="y_value",
         z_label="z_value",
+        test_episode=10,
     ):
 
         directory = os.path.dirname(path)
@@ -41,6 +38,40 @@ class LogitsPlt(ABC):
             os.makedirs(directory)
 
         if is_2d:
+
+            if len(self.data[0]) == 1:
+                if len(self.data) > 200:
+
+                    x_values = np.arange(200)
+                    y_values = []
+                    for i in range(200):
+                        x_values[i] += 1
+                        y_values.append(self.data[i][0])
+
+                else:
+                    data_2d = self.data
+                    x_values = np.arange(len(data_2d))
+                    y_values = [point[0] for point in data_2d]
+
+                    for i in range(len(data_2d)):
+                        x_values[i] += 1
+                plt.figure()
+                plt.plot(
+                    x_values,
+                    y_values,
+                    marker="o",
+                    markersize=3,
+                    linewidth=0.8,
+                )
+                plt.title(title)
+                plt.xlabel(x_label)
+                plt.ylabel(y_label)
+                plt.savefig(path, dpi=300)
+                return
+
+            # act_data = [item for sublist in self.act_data for item in sublist]
+            # data_t = [item for sublist in self.data for item in sublist]
+            # self.data = data_t
             act_data = self.act_data
             labels = None
 
@@ -48,16 +79,9 @@ class LogitsPlt(ABC):
             if isinstance(act_data[0], list) is False:
                 act_data_t = [[value] for value in act_data]
 
-            dbscan = DBSCAN(
-                eps=0.3, min_samples=5
-            )  # eps是邻域半径，min_samples是形成核心对象的最小点数
+            dbscan = DBSCAN(eps=0.3, min_samples=5)
 
             labels = dbscan.fit_predict(act_data_t)
-
-            # if self.act_data is not None and len(self.act_data[0]) > 1:
-            #     act_data_std = StandardScaler().fit_transform(self.act_data)
-            #     act_data_dimen = TSNE(n_components=1)
-            #     act_data = act_data_dimen.fit_transform(act_data_std)
 
             if len(self.data[0]) > 2:
                 data_std = StandardScaler().fit_transform(self.data)
@@ -72,6 +96,8 @@ class LogitsPlt(ABC):
                 data_2d = data_dimen.fit_transform(data_std)
             else:
                 data_2d = self.data
+
+            # print(data_2d)
 
             x_values = [point[0] for point in data_2d]
             y_values = [point[1] for point in data_2d]

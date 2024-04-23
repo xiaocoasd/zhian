@@ -1,10 +1,45 @@
+import base64
 import json
 import os.path
 
 import numpy as np
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
+def main_bg(main_bg):
+    main_bg_ext = "png"
+    st.markdown(
+        f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover
+         }}
+         </style>
+         """,
+        unsafe_allow_html=True
+    )
 
+
+def sidebar_bg(side_bg):
+    side_bg_ext = 'png'
+
+    st.markdown(
+        f"""
+      <style>
+      [data-testid="stSidebar"] > div:first-child {{
+          background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+      }}
+      </style>
+      """,
+        unsafe_allow_html=True,
+    )
+
+
+# 调用
+sidebar_bg('../view/pic/sback.jpg')
+
+# 调用
+main_bg('../view/pic/background.jpg')
 if "slider1" in st.session_state:
     st.session_state["slider1"] = st.session_state["slider1"]
 if "slider2" in st.session_state:
@@ -44,11 +79,11 @@ if "number_input3" in st.session_state:
 if "number_input4" in st.session_state:
     st.session_state["number_input4"] = st.session_state["number_input4"]
 st.title("测试进度")
-count = st_autorefresh(interval=1000, limit=100000, key="fizzbuzzcounter")
+count = st_autorefresh(interval=4000, limit=100000, key="fizzbuzzcounter")
 if "policy" not in st.session_state:
     st.session_state["policy"] = None
 if st.session_state["policy"] is not None:
-    with open("view/display.txt", 'r', encoding='utf-8') as f:
+    with open("../view/display.txt", 'r', encoding='utf-8') as f:
         text = f.read()
     st.write("##### 在这里查看您的测试进度")
     st.text(text)
@@ -101,8 +136,8 @@ if st.session_state["policy"] is not None:
     except Exception as e:
         pass
 
-    if os.path.exists("view/result.txt"):
-        with open("view/result.txt", 'r', encoding='utf-8') as f:
+    if os.path.exists("../view/result.txt"):
+        with open("../view/result.txt", 'r', encoding='utf-8') as f:
             text = f.read()
         values = text.split()  # 按空格分割值
         # 解析每个值并存储到相应的变量中

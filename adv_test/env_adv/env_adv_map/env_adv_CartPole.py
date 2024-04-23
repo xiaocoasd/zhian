@@ -2,6 +2,7 @@ from gymnasium.envs.classic_control.cartpole import CartPoleEnv
 import numpy as np
 import math
 from gymnasium import logger
+from gymnasium import spaces
 
 
 class EnvCartPoleAdv(CartPoleEnv):
@@ -19,6 +20,18 @@ class EnvCartPoleAdv(CartPoleEnv):
             self.polemass_length = self.masspole * self.length
 
             self.force_mag = np.random.uniform(1, 60)
+            high = np.array(
+                [
+                    self.x_threshold * 2,
+                    np.finfo(np.float32).max,
+                    self.theta_threshold_radians * 2,
+                    np.finfo(np.float32).max,
+                ],
+                dtype=np.float32,
+            )
+
+            self.action_space = spaces.Discrete(2)
+            self.observation_space = spaces.Box(-high, high, dtype=np.float32)
 
         self.steps = 1
         self.max_episode_steps = 500

@@ -1,4 +1,5 @@
 import argparse
+import base64
 import os
 import shutil
 import gymnasium as gym
@@ -9,9 +10,43 @@ from tianshou.utils.space_info import SpaceInfo
 import torch
 import sys
 
-sys.path.append('./')
+sys.path.append('../')
 import adv_test
+def main_bg(main_bg):
+    main_bg_ext = "png"
+    st.markdown(
+        f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover
+         }}
+         </style>
+         """,
+        unsafe_allow_html=True
+    )
 
+
+def sidebar_bg(side_bg):
+    side_bg_ext = 'png'
+
+    st.markdown(
+        f"""
+      <style>
+      [data-testid="stSidebar"] > div:first-child {{
+          background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+      }}
+      </style>
+      """,
+        unsafe_allow_html=True,
+    )
+
+
+# 调用
+sidebar_bg('../view/pic/sback.jpg')
+
+# 调用
+main_bg('../view/pic/background.jpg')
 def my_test(policy, args):
     policy.eval()
     env = gym.make(args.task)
@@ -114,7 +149,7 @@ with st.sidebar:
 
 if "policy" not in st.session_state:
     st.session_state["policy"] = None
-list1 = ["dqn", "ppo", "ddpg"]
+list1 = ["dqn", "ppo", "ddpg","a2c"]
 st.session_state["policy_type"] = st.selectbox("选择您的模型类别：", list1, key="selectbox2")
 thild_fn=st.file_uploader("如果您在训练时使用了自定义函数，上传您包含该函数的.py文件",type="py")
 if thild_fn is not None:
@@ -145,26 +180,28 @@ else:
 
 list2 = ["CartPole-v1", "Pendulum-v1", "Pong-v0", "Breakout-v0",
          "SpaceInvaders-v0",
-         "Humanoid-v3", "HalfCheetah-v3", "Ant-v3", "Taxi-v3","highway"]
+         "Humanoid-v3", "HalfCheetah-v3", "Ant-v3", "Taxi-v3","highway-v0"]
 st.session_state["task"] = st.selectbox("选择环境", list2, key="selectbox3")
 if st.session_state["task"] == "CartPole-v1":
-    st.image("view/gif/cart_pole.gif", caption="当前环境")
+    st.image("../view/gif/cart_pole.gif", caption="当前环境")
 elif st.session_state["task"] == "Pendulum-v1":
-    st.image("view/gif/pendulum.gif", caption="当前环境")
+    st.image("../view/gif/pendulum.gif", caption="当前环境")
 elif st.session_state["task"] == "Pong-v0":
-    st.image("view/gif/pong.gif", caption="当前环境")
+    st.image("../view/gif/pong.gif", caption="当前环境")
 elif st.session_state["task"] == "Breakout-v0":
-    st.image("view/gif/breakout.gif", caption="当前环境")
+    st.image("../view/gif/breakout.gif", caption="当前环境")
 elif st.session_state["task"] == "SpaceInvaders-v0":
-    st.image("view/gif/space_invaders.gif", caption="当前环境")
+    st.image("../view/gif/space_invaders.gif", caption="当前环境")
 elif st.session_state["task"] == "Humanoid-v3":
-    st.image("view/gif/humanoid.gif", caption="当前环境")
+    st.image("../view/gif/humanoid.gif", caption="当前环境")
 elif st.session_state["task"] == "HalfCheetah-v3":
-    st.image("view/gif/half_cheetah.gif", caption="当前环境")
+    st.image("../view/gif/half_cheetah.gif", caption="当前环境")
 elif st.session_state["task"] == "Ant-v3":
-    st.image("view/gif/ant.gif", caption="当前环境")
+    st.image("../view/gif/ant.gif", caption="当前环境")
 elif st.session_state["task"] == "Taxi-v3":
-    st.image("view/gif/taxi.gif", caption="当前环境")
+    st.image("../view/gif/taxi.gif", caption="当前环境")
+elif st.session_state["task"] == "highway-v0":
+    st.image("../view/gif/highway.gif", caption="当前环境")
 st.session_state["is_not_based_on_gym"] = st.checkbox("使用其他环境", key="checkbox6")
 
 test_begin = st.button("开始测试", type="primary")
@@ -220,7 +257,7 @@ if test_begin:
     if "targeted" in st.session_state:
         args.targeted = st.session_state["targeted"]
     args.is_based_on_gym = not st.session_state["is_not_based_on_gym"]
-    args.device = "cuda" if torch.cuda.is_available() else "cpu"
+    args.device = st.session_state["device"]
     if "env_stats_episode" in st.session_state:
         args.env_stats_episode = st.session_state["env_stats_episode"]
     if "rew_change_episode" in st.session_state:
@@ -246,6 +283,5 @@ if test_begin:
                 atk_succ_rate, robust_rate, env_stats_mean_rew, rew_change_mean_rew, abs_error, rsme_error, corr_matrix = my_test(
                     policy, args)
                 st.success("测试完成！去测试结果中查看吧！")
-
     else:
         st.error("当前还没有上传模型")

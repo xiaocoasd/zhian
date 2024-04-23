@@ -12,91 +12,6 @@ Observation = TypeVar("Observation")
 
 class EnvHighwayAdv(HighwayEnv):
 
-    # def __init__(
-    #     self,
-    #     config: dict = None,
-    #     args=None,
-    #     is_change_reward=False,
-    #     render_mode: str | None = None,
-    # ) -> None:
-    #     super().__init__(config, render_mode)
-
-    #     self.is_change_reward = is_change_reward
-
-    #     collision_reward_t = -1.0
-    #     right_lane_reward_t = 0.1
-    #     high_speed_reward_t = 0.4
-    #     lane_change_reward_t = 0.0
-    #     reward_speed_range_t = [20, 30]
-
-    #     lanes_count_t = 4
-    #     vehicles_count_t = 50
-    #     ego_count_t = 2
-    #     vehicles_density_t = 1
-    #     speed_limit_t = 30
-    #     offroad_terminal_t = False
-
-    #     if is_change_reward:
-
-    #         if args.collision_reward is not None:
-    #             collision_reward_t = args.collision_reward
-    #         else:
-    #             collision_reward_t = np.random.uniform(-1, -0.1)
-    #         if args.right_lane_reward is not None:
-    #             right_lane_reward_t = args.right_lane_reward
-    #         else:
-    #             right_lane_reward_t = np.random.uniform(0.1, 1)
-    #         if args.high_speed_reward is not None:
-    #             high_speed_reward_t = args.high_speed_reward
-    #         else:
-    #             high_speed_reward_t = np.random.uniform(0.1, 1)
-    #         if args.lane_change_reward is not None:
-    #             lane_change_reward_t = args.lane_change_reward
-    #         else:
-    #             lane_change_reward_t = np.random.uniform(-0.5, 0.5)
-    #         if args.reward_speed_range is not None:
-    #             reward_speed_range_t = args.reward_speed_range
-    #         else:
-    #             reward_speed_range_t = [
-    #                 np.random.randint(17, 22),
-    #                 np.random.randint(23, 30),
-    #             ]
-
-    #     else:
-
-    #         lanes_count_t = np.random.randint(3, 7)
-    #         vehicles_count_t = np.random.randint(30, 90)
-    #         ego_count_t = np.random.uniform(0.5, 2)
-    #         vehicles_density_t = np.random.uniform(0.5, 2)
-    #         speed_limit_t = np.random.randint(25, 50)
-    #         offroad_terminal_t = args.offroad_terminal
-
-    #     self.configure(
-    #         {
-    #             "observation": {"type": "Kinematics"},
-    #             "action": {
-    #                 "type": "DiscreteMetaAction",
-    #             },
-    #             "lanes_count": lanes_count_t,
-    #             "vehicles_count": vehicles_count_t,
-    #             "controlled_vehicles": 1,
-    #             "initial_lane_id": None,
-    #             "duration": 40,  # [s]
-    #             "ego_spacing": ego_count_t,
-    #             "vehicles_density": vehicles_density_t,
-    #             "collision_reward": collision_reward_t,
-    #             "right_lane_reward": right_lane_reward_t,
-    #             "high_speed_reward": high_speed_reward_t,
-    #             "lane_change_reward": lane_change_reward_t,
-    #             "reward_speed_range": reward_speed_range_t,
-    #             "normalize_reward": True,
-    #             "offroad_terminal": offroad_terminal_t,
-    #             "speed_limit": speed_limit_t,
-    #         }
-    #     )
-
-    #     print(self.config)
-
     def __init__(
         self,
         config: dict = None,
@@ -122,29 +37,14 @@ class EnvHighwayAdv(HighwayEnv):
         offroad_terminal_t = False
 
         if is_change_reward:
-            if args.collision_reward is not None:
-                collision_reward_t = args.collision_reward
-            else:
-                collision_reward_t = np.random.uniform(-1, -0.1)
-            if args.right_lane_reward is not None:
-                right_lane_reward_t = args.right_lane_reward
-            else:
-                right_lane_reward_t = np.random.uniform(0.1, 1)
-            if args.high_speed_reward is not None:
-                high_speed_reward_t = args.high_speed_reward
-            else:
-                high_speed_reward_t = np.random.uniform(0.1, 1)
-            if args.lane_change_reward is not None:
-                lane_change_reward_t = args.lane_change_reward
-            else:
-                lane_change_reward_t = np.random.uniform(-0.5, 0.5)
-            if args.rew_speed_range is not None:
-                reward_speed_range_t = args.reward_speed_range
-            else:
-                reward_speed_range_t = [
-                    np.random.randint(17, 22),
-                    np.random.randint(23, 30),
-                ]
+            collision_reward_t = np.random.uniform(-1, -0.1)
+            right_lane_reward_t = np.random.uniform(0.1, 1)
+            high_speed_reward_t = np.random.uniform(0.1, 1)
+            lane_change_reward_t = np.random.uniform(-0.5, 0.5)
+            reward_speed_range_t = [
+                np.random.randint(17, 22),
+                np.random.randint(23, 30),
+            ]
         else:
             lanes_count_t = np.random.randint(3, 7)
             vehicles_count_t = np.random.randint(30, 90)
