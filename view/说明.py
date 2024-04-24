@@ -117,7 +117,27 @@ st.dataframe(df)
 st.markdown(
     """
     ### 使用说明
-    - 将您模型的.pth文件传入文件接收器，如果您在训练的时候使用了自定义函数（例如ppo的训练
+    - 将您模型的.pth文件传入文件接收器，如果您在训练的时候使用了自定义函数（例如ppo的训练需要dist_fn）
+      您可以将包含该函数的python文件传入。例如：
+"""
+)
+code = """
+import torch
+from torch.distributions import Distribution, Independent, Normal
+def dist(*logits: torch.Tensor) -> Distribution:
+    return Independent(Normal(*logits), 1)
+"""
+
+st.code(code, language='python')
+st.markdown(
+    """
+    - 设置测试参数后点击开始测试即可在测试结果中查看
+"""
+)
+st.markdown(
+    """
+    ### 想了解更多吗？
+    - 查看我们的 [git仓库](https://github.com/xiaocoasd/zhian)
 """
 )
 
