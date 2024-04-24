@@ -168,15 +168,15 @@ if st.session_state["policy"] is not None:
             all_conditions_met = False
 
         if abs_error != 0.00:
-            st.write("#### abs_error: " + str(abs_error))
+            st.write("#### 平均绝对误差: " + str(abs_error))
             all_conditions_met = False
 
         if rsme_error != 0.00:
-            st.write("#### rsme_error: " + str(rsme_error))
+            st.write("#### 均方根误差: " + str(rsme_error))
             all_conditions_met = False
 
         if values[6] != "none":
-            st.write("#### corr_matrix：\n")
+            st.write("#### 相关性矩阵：\n")
             numbers = [float(num) for num in values[6].strip("[]").split(",")]
             # 创建2x2矩阵
             matrix = np.array(numbers).reshape((2, 2))
