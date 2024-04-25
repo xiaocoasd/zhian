@@ -149,7 +149,7 @@ with st.sidebar:
 
 if "policy" not in st.session_state:
     st.session_state["policy"] = None
-list1 = ["dqn", "ppo", "ddpg","a2c"]
+list1 = ["dqn","drqn","ddqn","ppo","a2c","drpo","ddpg","td3","sac","pg"]
 st.session_state["policy_type"] = st.selectbox("选择您的模型类别：", list1, key="selectbox2")
 thild_fn=st.file_uploader("如果您在训练时使用了自定义函数，上传您包含该函数的.py文件",type="py")
 if thild_fn is not None:
