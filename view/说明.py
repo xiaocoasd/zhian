@@ -78,10 +78,10 @@ def sidebar_bg(side_bg):
     )
 
 
-st.sidebar.image("../view/pic/logo.png")
+st.sidebar.image("view/pic/logo.png")
 # # 使用os.getcwd()和os.path.join()构建相对路径
-sidebar_bg("../view/pic/sback.jpg")
-main_bg(os.path.join("../view/pic/background.jpg"))
+sidebar_bg("view/pic/sback.jpg")
+main_bg(os.path.join("view/pic/background.jpg"))
 st.write("# 欢迎使用智安一体化测试平台")
 
 st.sidebar.success("点击上传模型和参数开始使用。")
@@ -98,7 +98,7 @@ st.markdown(
     """
 )
 
-st.image("../view/pic/frame.png")
+st.image("view/pic/frame.png")
 
 st.markdown(
     """
